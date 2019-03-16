@@ -1,4 +1,5 @@
 import datetime
+import time
 import re
 import os
 import csv
@@ -8,42 +9,55 @@ from selenium.webdriver.chrome.options import Options
 
 url = ("https://www.cevforbc.ca/")
 
-"""driver code (headless)"""
-options = Options()
-options.add_argument("--headless")
-driver = webdriver.Chrome('C:/Users/jami/Desktop/master/chromedriver.exe', options=options)
-driver.get(url)
+while 1:
 
-bs = Soup(driver.page_source, 'html.parser')
-funds_container = bs.findAll("cufon", class_="cufon")
+    """driver code (headless)"""
+    options = Options()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome('C:/Users/jami/Desktop/master/chromedriver.exe', options=options)
+    driver.get(url)
 
-funds_remaining = re.sub(",", "", funds_container[1].get('alt'))
-funds_reserved = re.sub(",", "", funds_container[3].get('alt'))
-funds_disbursed = re.sub(",", "", funds_container[5].get('alt'))
+    bs = Soup(driver.page_source, 'html.parser')
+    funds_container = bs.findAll("cufon", class_="cufon")
 
-# get current time
-current_time = datetime.datetime.now()
+    funds_remaining = re.sub(",", "", funds_container[1].get('alt'))
+    funds_reserved = re.sub(",", "", funds_container[3].get('alt'))
+    funds_disbursed = re.sub(",", "", funds_container[5].get('alt'))
 
-if os.path.isfile('./data.csv'):
+    # get current time
+    current_time = datetime.datetime.now()
 
-    fields = [current_time,
-              funds_remaining,
-              funds_reserved,
-              funds_disbursed]
+    if os.path.isfile('./data.csv'):
 
-    with open(r'data.csv', 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(fields)
-else:
+        fields = [current_time,
+                  funds_remaining,
+                  funds_reserved,
+                  funds_disbursed]
 
-    headers = ['time', 'remaining', 'reserved', 'disbursed']
+        with open(r'data.csv', 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(fields)
 
-    with open('data.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerow(headers)
-        writer.writerow([current_time,
-                         funds_remaining,
-                         funds_reserved,
-                         funds_disbursed])
+        print([current_time,
+               funds_remaining,
+               funds_reserved,
+               funds_disbursed])
+    else:
 
-f.close()
+        headers = ['time', 'remaining', 'reserved', 'disbursed']
+
+        with open(r'data.csv', 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerow(headers)
+            writer.writerow([current_time,
+                             funds_remaining,
+                             funds_reserved,
+                             funds_disbursed])
+        print([current_time,
+               funds_remaining,
+               funds_reserved,
+               funds_disbursed])
+
+    f.close()
+
+    time.sleep(300)
