@@ -3,29 +3,39 @@ import time
 import re
 import os
 import csv
+import requests
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 url = ("https://www.cevforbc.ca/")
 
+hdr = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+
 while 1:
 
     """driver code (headless)"""
     options = Options()
     options.add_argument("--headless")
-    driver = webdriver.Chrome('C:/Users/jami/Desktop/master/chromedriver.exe', options=options)
+    driver = webdriver.Chrome('chromedriver.exe', options=options)
     driver.get(url)
 
     bs = Soup(driver.page_source, 'html.parser')
     funds_container = bs.findAll("cufon", class_="cufon")
 
-    funds_remaining = re.sub(",", "", funds_container[1].get('alt'))
-    funds_reserved = re.sub(",", "", funds_container[3].get('alt'))
-    funds_disbursed = re.sub(",", "", funds_container[5].get('alt'))
+    funds_remaining = int(re.sub(",", "", funds_container[1].get('alt')))
+    funds_reserved = int(re.sub(",", "", funds_container[3].get('alt')))
+    funds_disbursed = int(re.sub(",", "", funds_container[5].get('alt')))
 
     # get current time
     current_time = datetime.datetime.now()
+    current_time = current_time.replace(second=0, microsecond=0)
 
     if os.path.isfile('./data.csv'):
 
@@ -34,7 +44,7 @@ while 1:
                   funds_reserved,
                   funds_disbursed]
 
-        with open(r'data.csv', 'a') as f:
+        with open(r'data.csv', 'ab') as f:
             writer = csv.writer(f)
             writer.writerow(fields)
 
@@ -60,4 +70,4 @@ while 1:
 
     f.close()
 
-    time.sleep(300)
+    time.sleep(900)

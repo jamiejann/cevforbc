@@ -15,21 +15,37 @@ with open(r'data.csv', 'r') as csvfile:
         reserved_list.append(row[2])
         disbursed_list.append(row[3])
 
+# delete headers from csv file, can be more efficient?
 del time_list[0]
 del remaining_list[0]
 del reserved_list[0]
 del disbursed_list[0]
 
+plt.subplot(3, 1, 1)
 plt.plot(time_list, remaining_list)
-plt.gcf().autofmt_xdate()
-plt.show()
+plt.title('Remaining Funds')
+plt.gca().invert_yaxis()
 
+plt.subplot(3, 1, 2)
 plt.plot(time_list, reserved_list)
-plt.gcf().autofmt_xdate()
-plt.show()
+plt.title('Reserved Funds')
 
+plt.subplot(3, 1, 3)
 plt.plot(time_list, disbursed_list)
-plt.gcf().autofmt_xdate()
-plt.show()
+plt.title('Disbursed Funds')
+plt.xlabel('time')
 
-time.sleep(300)
+len_normalized = len(time_list) / 10
+ax = plt.gca()
+
+# showing only 10 x labels
+for label in ax.get_xaxis().get_ticklabels():
+    label.set_visible(False)
+for label in ax.get_xaxis().get_ticklabels()[::len_normalized]:
+    label.set_visible(True)
+
+plt.gcf().autofmt_xdate()
+
+plt.tight_layout()
+
+plt.show()
