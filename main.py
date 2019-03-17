@@ -3,7 +3,6 @@ import time
 import re
 import os
 import csv
-import requests
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -27,7 +26,13 @@ while 1:
     driver.get(url)
 
     bs = Soup(driver.page_source, 'html.parser')
+
+    #close the chrome driver
+    driver.quit()
+
+
     funds_container = bs.findAll("cufon", class_="cufon")
+
 
     funds_remaining = int(re.sub(",", "", funds_container[1].get('alt')))
     funds_reserved = int(re.sub(",", "", funds_container[3].get('alt')))
@@ -37,6 +42,7 @@ while 1:
     current_time = datetime.datetime.now()
     current_time = current_time.replace(second=0, microsecond=0)
 
+    # check whether there already exists data
     if os.path.isfile('./data.csv'):
 
         fields = [current_time,
@@ -45,7 +51,6 @@ while 1:
                   funds_disbursed]
 
         try:
-
             with open(r'data.csv', 'ab') as f:
                 writer = csv.writer(f)
                 writer.writerow(fields)
@@ -56,8 +61,9 @@ while 1:
                funds_remaining,
                funds_reserved,
                funds_disbursed])
-    else:
 
+    # if first time creating data.csv
+    else:
         headers = ['time', 'remaining', 'reserved', 'disbursed']
 
         try:
@@ -76,10 +82,11 @@ while 1:
                funds_reserved,
                funds_disbursed])
 
+    # check whether file was opened
     try:
         f
         f.close()
     except :
         pass
 
-    time.sleep(900)
+    time.sleep(1800)

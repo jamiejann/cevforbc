@@ -1,5 +1,4 @@
 import csv
-import time
 import matplotlib.pyplot as plt
 
 time_list = []
@@ -7,8 +6,8 @@ remaining_list = []
 reserved_list = []
 disbursed_list = []
 
-with open(r'data.csv', 'r') as csvfile:
-    plots = csv.reader(csvfile, delimiter=',')
+with open(r'data.csv', 'r') as data:
+    plots = csv.reader(data, delimiter=',')
     for row in plots:
         time_list.append(row[0])
         remaining_list.append(row[1])
@@ -21,6 +20,7 @@ del remaining_list[0]
 del reserved_list[0]
 del disbursed_list[0]
 
+# initialize 3 by 1 plots, invert y axis for python misprint
 plt.subplot(3, 1, 1)
 plt.plot(time_list, remaining_list)
 plt.title('Remaining Funds')
@@ -33,7 +33,7 @@ plt.title('Reserved Funds')
 plt.subplot(3, 1, 3)
 plt.plot(time_list, disbursed_list)
 plt.title('Disbursed Funds')
-plt.xlabel('time')
+plt.xlabel('Time')
 
 len_normalized = len(time_list) / 10
 ax = plt.gca()
