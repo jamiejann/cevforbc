@@ -44,9 +44,13 @@ while 1:
                   funds_reserved,
                   funds_disbursed]
 
-        with open(r'data.csv', 'ab') as f:
-            writer = csv.writer(f)
-            writer.writerow(fields)
+        try:
+
+            with open(r'data.csv', 'ab') as f:
+                writer = csv.writer(f)
+                writer.writerow(fields)
+        except:
+            pass
 
         print([current_time,
                funds_remaining,
@@ -56,18 +60,26 @@ while 1:
 
         headers = ['time', 'remaining', 'reserved', 'disbursed']
 
-        with open(r'data.csv', 'wb') as f:
-            writer = csv.writer(f)
-            writer.writerow(headers)
-            writer.writerow([current_time,
-                             funds_remaining,
-                             funds_reserved,
-                             funds_disbursed])
+        try:
+            with open(r'data.csv', 'wb') as f:
+                writer = csv.writer(f)
+                writer.writerow(headers)
+                writer.writerow([current_time,
+                                 funds_remaining,
+                                 funds_reserved,
+                                 funds_disbursed])
+        except:
+            pass
+
         print([current_time,
                funds_remaining,
                funds_reserved,
                funds_disbursed])
 
-    f.close()
+    try:
+        f
+        f.close()
+    except :
+        pass
 
     time.sleep(900)
