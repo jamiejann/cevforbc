@@ -3,6 +3,8 @@ import time
 import re
 import os
 import csv
+import pytz
+from tzlocal import get_localzone
 from bs4 import BeautifulSoup as Soup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -27,20 +29,20 @@ while 1:
 
     bs = Soup(driver.page_source, 'html.parser')
 
-    #close the chrome driver
+    # close the chrome driver for less console time
     driver.quit()
 
-
     funds_container = bs.findAll("cufon", class_="cufon")
-
 
     funds_remaining = int(re.sub(",", "", funds_container[1].get('alt')))
     funds_reserved = int(re.sub(",", "", funds_container[3].get('alt')))
     funds_disbursed = int(re.sub(",", "", funds_container[5].get('alt')))
 
     # get current time
-    current_time = datetime.datetime.now()
-    current_time = current_time.replace(second=0, microsecond=0)
+    location = pytz.timezone('America/Los_Angeles')
+    current_time = datetime.datetime.now(tz=location)
+
+    current_time = current_time.replace(second=0, microsecond=0, tzinfo=None)
 
     # check whether there already exists data
     if os.path.isfile('./data.csv'):
@@ -86,7 +88,7 @@ while 1:
     try:
         f
         f.close()
-    except :
+    except:
         pass
 
     time.sleep(1800)
