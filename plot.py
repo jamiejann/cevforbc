@@ -44,10 +44,15 @@ plt.plot(time_list, reserved_list)
 plt.title('Reserved Funds')
 
 ax = plt.gca()
+ax.set_yticks(ax.get_yticks()[::2])
+
+"""
+ax = plt.gca()
 for label in ax.get_yaxis().get_ticklabels():
     label.set_visible(False)
 for label in ax.get_yaxis().get_ticklabels()[::len_normalized_yaxis]:
     label.set_visible(True)
+"""
 
 plt.subplot(3, 1, 3)
 plt.plot(time_list, disbursed_list)
