@@ -1,5 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
+from matplotlib import ticker
+from matplotlib.ticker import MaxNLocator
 
 time_list = []
 remaining_list = []
@@ -31,9 +33,10 @@ plt.gca().invert_yaxis()
 
 # show only 5 y labels
 ax = plt.gca()
-#ax.set_yticks(ax.get_yticks()[::2])
-remaining_list.remove("")
-plt.yticks(max(remaining_list), min(remaining_list))
+#ax.yaxis.set_major_locator(ticker.maxNLocator(integer=True))
+ax.set_yticks(ax.get_yticks()[::2])
+#remaining_list.remove("")
+#plt.yticks(max(remaining_list), min(remaining_list))
 
 
 plt.subplot(3, 1, 2)
