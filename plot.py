@@ -1,7 +1,9 @@
 import csv
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
-plt.style.use('seaborn-whitegrid')
+#plt.style.use('seaborn-whitegrid')
+#plt.style.use('ggplot')
+plt.style.use('bmh')
 
 time_list = []
 remaining_list = []
@@ -66,4 +68,6 @@ ax.xaxis.set_major_locator(xlocator)
 plt.gcf().autofmt_xdate()
 plt.tight_layout()
 
+plt.grid(b=None)
+plt.savefig('output.jpg', optimize=True, quality=100)
 plt.show()
