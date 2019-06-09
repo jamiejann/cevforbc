@@ -26,16 +26,17 @@ options.add_argument("--headless")
 driver = webdriver.Chrome('chromedriver.exe', options=options)
 driver.get(url)
 
-bs = Soup(driver.page_source, 'html.parser')
+try:
+    bs = Soup(driver.page_source, 'html.parser')
+    funds_container = bs.findAll("cufon", class_="cufon")
+    funds_remaining = int(re.sub(",", "", funds_container[1].get('alt')))
+    funds_reserved = int(re.sub(",", "", funds_container[3].get('alt')))
+    funds_disbursed = int(re.sub(",", "", funds_container[5].get('alt')))
 
+except:
+    pass
 # close the chrome driver for less console time
 driver.quit()
-
-funds_container = bs.findAll("cufon", class_="cufon")
-
-funds_remaining = int(re.sub(",", "", funds_container[1].get('alt')))
-funds_reserved = int(re.sub(",", "", funds_container[3].get('alt')))
-funds_disbursed = int(re.sub(",", "", funds_container[5].get('alt')))
 
 # get current time
 location = pytz.timezone('America/Los_Angeles')
